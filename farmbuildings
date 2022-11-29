@@ -1,0 +1,46 @@
+CREATE TABLE buildings (id SERIAL NOT NULL PRIMARY KEY,
+  name TEXT UNIQUE NOT NULL,
+  image TEXT NULL,
+  notes TEXT NULL,
+  height_m REAL,
+  last_update TIMESTAMP DEFAULT now() NOT NULL,
+  last_update_by TEXT NOT NULL,
+  uuid TEXT UNIQUE NOT NULL,
+  sketch TEXT NULL,
+  full_image_path TEXT NULL,
+  full_sketch_path TEXT NULL
+);
+
+ALTER TABLE buildings
+ADD fid SERIAL NOT NULL;
+
+
+COMMENT ON TABLE buildings IS 
+'This is a table for buildings.';
+
+INSERT INTO buildings (
+	last_update,
+	last_update_by,
+	uuid,	
+	name
+) VALUES (
+	now(),
+	'db-init',
+	'{d7a1a353-f83d-426d-b87d-b0b797803ed5}',
+	'other'
+);
+  
+CREATE TABLE wall_type_lookup_fid (fid SERIAL NOT NULL,
+  wall_type_lookup_name TEXT NULL,
+  wall_type_lookup_colour TEXT NULL,
+  wall_type_lookup_uuid TEXT UNIQUE NOT NULL
+);
+
+
+ALTER TABLE wall_type_lookup_fid
+ADD wall_type_lookup_fid SERIAL NOT NULL;
+
+COMMENT ON TABLE wall_type_lookup_fid IS 
+'This is a lookup table for wall types i.e name, colour, etc.';
+
+CREATE INDEX wall_type_lookup_uuid ON buildings(uuid)
